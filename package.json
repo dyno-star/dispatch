@@ -1,0 +1,19 @@
+{
+  "name": "dispatch-ng",
+  "private": true,
+  "description": "On-demand dispatch/courier marketplace for Nigeria",
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "postinstall": "pnpm --filter @dispatch/shared build",
+    "dev:api": "pnpm --filter @dispatch/api dev",
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "db:up": "docker compose up -d postgres redis",
+    "db:down": "docker compose down",
+    "db:migrate": "pnpm --filter @dispatch/api migrate"
+  }
+}
