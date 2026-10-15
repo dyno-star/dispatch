@@ -27,6 +27,12 @@ export type AccountType = (typeof ACCOUNT_TYPES)[number];
 export const RIDER_STATUSES = ["pending", "approved", "rejected", "suspended"] as const;
 export type RiderStatus = (typeof RIDER_STATUSES)[number];
 
+export const RIDER_DOCUMENT_KINDS = ["nin", "licence", "selfie", "vehicle"] as const;
+export type RiderDocumentKind = (typeof RIDER_DOCUMENT_KINDS)[number];
+
+/** Documents an admin needs before a rider can be approved. "vehicle" is optional. */
+export const REQUIRED_RIDER_DOCUMENTS: readonly RiderDocumentKind[] = ["nin", "licence", "selfie"];
+
 export const DISPUTE_REASONS = [
   "package_damaged",
   "package_missing",
