@@ -11,6 +11,6 @@ function required(name: string, fallback?: string): string {
 export const config = {
   port: Number(process.env.PORT ?? 4000),
   env: process.env.NODE_ENV ?? "development",
-  databaseUrl: required("DATABASE_URL", "postgres://dispatch:dispatch@localhost:5432/dispatch"),
+  databaseUrl: required("DATABASE_URL", "postgres://dispatch:dispatch@localhost:5433/dispatch"),
   redisUrl: required("REDIS_URL", "redis://localhost:6379"),
 } as const;

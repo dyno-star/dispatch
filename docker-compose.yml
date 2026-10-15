@@ -1,12 +1,15 @@
 services:
   postgres:
     image: postgis/postgis:16-3.4
+    # Only published for Intel; runs under emulation on Apple Silicon.
+    platform: linux/amd64
     environment:
       POSTGRES_USER: dispatch
       POSTGRES_PASSWORD: dispatch
       POSTGRES_DB: dispatch
     ports:
-      - "5432:5432"
+      # 5433 on the host so it doesn't clash with a locally installed Postgres on 5432.
+      - "5433:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
 
