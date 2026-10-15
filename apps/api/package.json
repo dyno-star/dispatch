@@ -13,8 +13,12 @@
   },
   "dependencies": {
     "@dispatch/shared": "workspace:*",
+    "@fastify/multipart": "^10.1.4",
+    "@fastify/rate-limit": "^11.2.1",
     "fastify": "^5.0.0",
-    "pg": "^8.13.0"
+    "jose": "^6.2.12",
+    "pg": "^8.13.0",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
