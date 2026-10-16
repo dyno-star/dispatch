@@ -4,7 +4,7 @@ An on-demand dispatch and courier marketplace for Nigeria, starting in Lagos.
 
 Instead of saving random dispatch riders' numbers and calling them one by one, a customer opens the app, requests a delivery, and gets connected to a **verified rider nearby**. Both sides see what they need, the customer tracks the rider live (and can share a tracking link with the recipient), pays in-app, and the rider proves delivery with a PIN and photo.
 
-> **Status:** MVP step 1 (accounts and rider onboarding) done. Next up is step 2 of the [roadmap](ROADMAP.md).
+> **Status:** MVP steps 1–2 (accounts, rider onboarding, quotes and orders) done. Next up is step 3 of the [roadmap](ROADMAP.md).
 
 ## How it works
 
@@ -71,7 +71,7 @@ Create an admin to review rider applications (quote the phone number if it has s
 pnpm --filter @dispatch/api make-admin 08012345678 "Ada Obi"
 ```
 
-API reference for what's built so far: [Step 1: auth and riders](docs/api/step-1-auth-and-riders.md).
+API reference for what's built so far: [Step 1: auth and riders](docs/api/step-1-auth-and-riders.md), [Step 2: orders and pricing](docs/api/step-2-orders-and-pricing.md). Prices are set in `apps/api/config/cities/lagos.json`.
 
 Run checks:
 
