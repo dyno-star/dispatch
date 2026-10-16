@@ -1,0 +1,13 @@
+{
+  "name": "Lagos",
+  "serviceArea": { "minLat": 6.37, "maxLat": 6.75, "minLng": 2.7, "maxLng": 4.35 },
+  "pricing": {
+    "baseKobo": 100000,
+    "perKmKobo": 25000,
+    "sizeMultiplier": { "small": 1.0, "medium": 1.2, "large": 1.5 },
+    "vehicleMultiplier": { "bike": 1.0, "car": 1.8, "van": 2.5 },
+    "asapFeeKobo": 50000,
+    "roundToKobo": 5000,
+    "platformFeePercent": 20
+  }
+}
