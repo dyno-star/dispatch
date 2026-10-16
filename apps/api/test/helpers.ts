@@ -5,6 +5,8 @@ import type { FastifyInstance } from "fastify";
 import { buildApp } from "../src/app.js";
 import { MemorySmsSender } from "../src/adapters/sms.js";
 import { MemoryStorage } from "../src/adapters/storage.js";
+import { FakeMaps } from "../src/adapters/maps.js";
+import { loadCityConfig } from "../src/modules/pricing/city.js";
 import type { AppDeps } from "../src/deps.js";
 import { createPool, withTransaction, type Db } from "../src/db/pool.js";
 import { createUser } from "../src/modules/users/users.js";
@@ -15,7 +17,11 @@ export interface TestContext {
   db: Db;
   sms: MemorySmsSender;
   storage: MemoryStorage;
+  maps: FakeMaps;
 }
+
+/** The real Lagos settings, so tests follow config/cities/lagos.json. */
+export const LAGOS = loadCityConfig(new URL("../config/cities/lagos.json", import.meta.url).pathname);
 
 /**
  * Builds the app once per test file and empties the tables before each test.
@@ -28,10 +34,13 @@ export function useTestApp(overrides: Partial<AppDeps> = {}): TestContext {
     ctx.db = createPool(TEST_DATABASE_URL);
     ctx.sms = new MemorySmsSender();
     ctx.storage = new MemoryStorage();
+    ctx.maps = new FakeMaps();
     ctx.app = buildApp({
       db: ctx.db,
       sms: ctx.sms,
       storage: ctx.storage,
+      maps: ctx.maps,
+      city: LAGOS,
       jwtSecret: "test-jwt-secret",
       otpSecret: "test-otp-secret",
       authRateLimitPerHour: 10_000,
@@ -42,10 +51,12 @@ export function useTestApp(overrides: Partial<AppDeps> = {}): TestContext {
 
   beforeEach(async () => {
     await ctx.db.query(
-      "TRUNCATE otp_codes, refresh_tokens, rider_documents, rider_profiles, users, accounts RESTART IDENTITY CASCADE",
+      `TRUNCATE order_events, orders, quotes, otp_codes, refresh_tokens, rider_documents, rider_profiles, users, accounts
+       RESTART IDENTITY CASCADE`,
     );
     ctx.sms.sent.length = 0;
     ctx.storage.files.clear();
+    ctx.maps.distanceM = 10_000;
   });
 
   afterAll(async () => {

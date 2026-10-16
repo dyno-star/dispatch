@@ -2,12 +2,14 @@ import Fastify, { type FastifyError, type FastifyInstance } from "fastify";
 import multipart from "@fastify/multipart";
 import rateLimit from "@fastify/rate-limit";
 import { ZodError } from "zod";
-import { ORDER_STATUSES } from "@dispatch/shared";
+import { InvalidTransitionError, ORDER_STATUSES } from "@dispatch/shared";
 import type { AppDeps } from "./deps.js";
 import { AppError, tooManyRequests } from "./http/errors.js";
 import { authRoutes } from "./modules/auth/routes.js";
 import { riderRoutes, MAX_DOCUMENT_BYTES } from "./modules/riders/routes.js";
 import { adminRoutes } from "./modules/admin/routes.js";
+import { quoteRoutes } from "./modules/orders/quote-routes.js";
+import { orderRoutes } from "./modules/orders/order-routes.js";
 
 // Builds the HTTP app without starting it, so tests can call app.inject().
 // Feature modules (accounts, orders, matching, tracking, pricing, payments,
@@ -33,15 +35,20 @@ export function buildApp(deps: AppDeps): FastifyInstance {
   app.register(authRoutes(deps), { prefix: "/auth" });
   app.register(riderRoutes(deps), { prefix: "/riders" });
   app.register(adminRoutes(deps), { prefix: "/admin" });
+  app.register(quoteRoutes(deps), { prefix: "/quotes" });
+  app.register(orderRoutes(deps), { prefix: "/orders" });
 
   app.setNotFoundHandler((req, reply) => {
     reply.code(404).send({ error: { code: "not_found", message: `Route ${req.method} ${req.url} not found` } });
   });
 
   // Every error leaves as { error: { code, message } } (docs/system-design/06-api.md).
-  app.setErrorHandler((err: FastifyError | AppError | ZodError, req, reply) => {
+  app.setErrorHandler((err: FastifyError | AppError | ZodError | InvalidTransitionError, req, reply) => {
     if (err instanceof AppError) {
       return reply.code(err.statusCode).send({ error: { code: err.code, message: err.message } });
+    }
+    if (err instanceof InvalidTransitionError) {
+      return reply.code(409).send({ error: { code: "invalid_transition", message: err.message } });
     }
     if (err instanceof ZodError) {
       const details = err.issues.map((issue) => ({ path: issue.path.join("."), message: issue.message }));

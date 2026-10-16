@@ -3,6 +3,8 @@ import { config } from "./config.js";
 import { createPool } from "./db/pool.js";
 import { ConsoleSmsSender } from "./adapters/sms.js";
 import { LocalDiskStorage } from "./adapters/storage.js";
+import { EstimateMaps } from "./adapters/maps.js";
+import { loadCityConfig } from "./modules/pricing/city.js";
 
 const db = createPool(config.databaseUrl);
 
@@ -10,6 +12,8 @@ const app = buildApp({
   db,
   sms: new ConsoleSmsSender(),
   storage: new LocalDiskStorage(config.uploadDir),
+  maps: new EstimateMaps(),
+  city: loadCityConfig(config.cityConfigPath),
   jwtSecret: config.jwtSecret,
   otpSecret: config.otpSecret,
 });

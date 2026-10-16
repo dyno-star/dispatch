@@ -23,4 +23,5 @@ export const config = {
   jwtSecret: secret("JWT_SECRET", "dev-jwt-secret-do-not-use-in-production"),
   otpSecret: secret("OTP_SECRET", "dev-otp-secret-do-not-use-in-production"),
   uploadDir: required("UPLOAD_DIR", "./.data/uploads"),
+  cityConfigPath: required("CITY_CONFIG", "./config/cities/lagos.json"),
 } as const;
