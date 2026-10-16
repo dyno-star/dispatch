@@ -7,11 +7,11 @@ Full reasoning in [`docs/system-design/12-roadmap.md`](docs/system-design/12-roa
 Each step ends with something demoable and tested.
 
 - [x] **Step 0 — Foundations:** system design docs, monorepo, shared order status machine, database schema, local Postgres + Redis
-- [ ] **Step 1 — Accounts + riders:** phone OTP login, tokens, roles; rider application with document upload; admin approve/reject
+- [x] **Step 1 — Accounts + riders:** phone OTP login, tokens, roles; rider application with document upload; admin approve/reject ([API](docs/api/step-1-auth-and-riders.md)). Rider bank details move to Step 5, where they are registered with the payment gateway.
 - [ ] **Step 2 — Orders + pricing:** quote endpoint (maps distance + price formula), create order, status transitions with `order_events`, cancel
 - [ ] **Step 3 — Matching:** rider online/offline, Redis geo positions, offers to closest 5, 20 s timeout and radius expansion, atomic accept
 - [ ] **Step 4 — Tracking:** location ingest, Redis pub/sub, WebSocket to customer, public share-link page
-- [ ] **Step 5 — Payments:** gateway checkout, verified webhooks, double-entry ledger, rider payouts, refunds
+- [ ] **Step 5 — Payments:** gateway checkout, verified webhooks, double-entry ledger, rider bank details (gateway transfer recipient), rider payouts, refunds
 - [ ] **Step 6 — Proof + admin:** delivery PIN and photo, ratings, disputes, admin panel
 
 ## Phase 2 — Scale

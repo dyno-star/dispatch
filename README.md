@@ -4,7 +4,7 @@ An on-demand dispatch and courier marketplace for Nigeria, starting in Lagos.
 
 Instead of saving random dispatch riders' numbers and calling them one by one, a customer opens the app, requests a delivery, and gets connected to a **verified rider nearby**. Both sides see what they need, the customer tracks the rider live (and can share a tracking link with the recipient), pays in-app, and the rider proves delivery with a PIN and photo.
 
-> **Status:** design complete, project skeleton in place. MVP build starts with step 1 of the [roadmap](ROADMAP.md).
+> **Status:** MVP step 1 (accounts and rider onboarding) done. Next up is step 2 of the [roadmap](ROADMAP.md).
 
 ## How it works
 
@@ -56,17 +56,31 @@ Requirements: Node.js 22+, pnpm 9+, Docker.
 ```bash
 pnpm install
 cp .env.example .env
-pnpm db:up          # start Postgres + Redis
+pnpm db:up          # start Postgres (on localhost:5433) + Redis
 pnpm db:migrate     # create the schema
 pnpm dev:api        # http://localhost:4000/health
 ```
+
+Postgres is published on port **5433** so it doesn't clash with a locally installed Postgres on 5432.
+
+In development, OTP codes are printed to the API log instead of being sent by SMS, and rider documents are saved under `apps/api/.data/uploads`.
+
+Create an admin to review rider applications (quote the phone number if it has spaces):
+
+```bash
+pnpm --filter @dispatch/api make-admin 08012345678 "Ada Obi"
+```
+
+API reference for what's built so far: [Step 1: auth and riders](docs/api/step-1-auth-and-riders.md).
 
 Run checks:
 
 ```bash
 pnpm typecheck
-pnpm test
+pnpm test           # API tests need Postgres running: pnpm db:up
 ```
+
+The API tests create and reset a separate `dispatch_test` database on each run, so they never touch your development data. Set `TEST_DATABASE_URL` to use a different one.
 
 ## Tech stack
 
